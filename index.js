@@ -8,7 +8,7 @@ let globalStore=[];
 const newCard = ({id , imageUrl , tasktitle , tasktype ,taskdescription}) => `<div class="p-2 col-md-6 col-lg-4 id=${id}">
 <div class="card">
   <div class="card-header d-flex justify-content-end gap-2 " style="background-color: #000000;">
-    <button type="button" class="btn btn-outline-success"><i class="fas fa-edit"></i></button>
+    <button type="button" class="btn btn-outline-success" id=${id} onclick="editCard.apply(this,arguments)"><i class="fas fa-edit" id=${id} onclick="editCard.apply(this,arguments)"></i></button>
     <button type="button" class="btn btn-outline-danger " id=${id} onclick="deleteCard.apply(this,arguments)"><i class="fas fa-trash-alt" id=${id} onclick="deleteCard.apply(this,arguments)"></i></button>
   </div>
   <img src="${imageUrl}" class="card-img-top" alt="cardtop">
@@ -72,3 +72,30 @@ const deleteCard = (event) => {
   return event.target.parentNode.parentNode.parentNode.parentNode.parentNode.removeChild(
     event.target.parentNode.parentNode.parentNode.parentNode);
 }
+
+const editCard = (event) => {
+  event=window.event;
+  const targetID = event.target.id;
+  const tagname = event.target.tagName;
+
+  let parentElement ;
+
+  if (tagname === "BUTTON"){
+    parentElement = event.target.parentNode.parentNode;
+  }
+  else{
+    parentElement = event.target.parentNode.parentNode.parentNode;
+  }
+ 
+  let tasktitle = parentElement.childNodes[5].childNodes[1];
+  let taskdescription = parentElement.childNodes[5].childNodes[3];
+  let tasktype = parentElement.childNodes[5].childNodes[5];
+  let submitButton = parentElement.childNodes[7].childNodes[1];
+
+  tasktitle.setAttribute ("contenteditable" ,"true");
+  taskdescription.setAttribute ("contenteditable" ,"true");
+  tasktype.setAttribute ("contenteditable" ,"true");
+  submitButton.innerHTML="Save Changes";
+  
+
+};
