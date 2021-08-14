@@ -5,7 +5,8 @@ console.log(taskcontainer);
 let globalStore=[];
 
 
-const newCard = ({id , imageUrl , tasktitle , tasktype ,taskdescription}) => `<div class="p-2 col-md-6 col-lg-4 id=${id}">
+const newCard = ({id , imageUrl , tasktitle , tasktype ,taskdescription}) => `
+<div class="p-2 col-md-6 col-lg-4 id=${id}">
 <div class="card">
   <div class="card-header d-flex justify-content-end gap-2 " style="background-color: #000000;">
     <button type="button" class="btn btn-outline-success" id=${id} onclick="editCard.apply(this,arguments)"><i class="fas fa-edit" id=${id} onclick="editCard.apply(this,arguments)"></i></button>
@@ -18,7 +19,7 @@ const newCard = ({id , imageUrl , tasktitle , tasktype ,taskdescription}) => `<d
     <span class="badge bg-primary">${tasktype}</span>
   </div>
   <div class="card-footer text-muted " style="background-color: #000000;">
-    <button type="button" class="btn btn-outline-primary float-end" id=${id}>Open Task</button>
+    <button type="button" class="btn btn-outline-primary float-end" data-bs-toggle="modal" data-bs-target="#openModal" id=${id}>Open Task</button>
   </div>
 </div>
 </div>`
@@ -137,6 +138,12 @@ const editCard = (event) => {
      }
      return task ;
    });
-   localStorage.setItem("Tasky" ,JSON.stringify({cards:globalStore}))
+   localStorage.setItem("Tasky" ,JSON.stringify({cards:globalStore}));
+   tasktitle.setAttribute ("contenteditable" ,"false");
+  taskdescription.setAttribute ("contenteditable" ,"false");
+  tasktype.setAttribute ("contenteditable" ,"false");
+  submitButton.removeAttribute("onclick");
+  submitButton.innerHTML="Open Task";
+
  
 };
