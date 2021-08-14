@@ -18,7 +18,7 @@ const newCard = ({id , imageUrl , tasktitle , tasktype ,taskdescription}) => `<d
     <span class="badge bg-primary">${tasktype}</span>
   </div>
   <div class="card-footer text-muted " style="background-color: #000000;">
-    <button type="button" class="btn btn-outline-primary float-end">Open Task</button>
+    <button type="button" class="btn btn-outline-primary float-end" id=${id}>Open Task</button>
   </div>
 </div>
 </div>`
@@ -95,7 +95,48 @@ const editCard = (event) => {
   tasktitle.setAttribute ("contenteditable" ,"true");
   taskdescription.setAttribute ("contenteditable" ,"true");
   tasktype.setAttribute ("contenteditable" ,"true");
+  submitButton.setAttribute("onclick","saveEditChanges.apply(this,arguments)");
   submitButton.innerHTML="Save Changes";
-  
 
+};
+
+ const saveEditChanges = (event) => {
+  event=window.event;
+  const targetID = event.target.id;
+  const tagname = event.target.tagName;
+
+  let parentElement ;
+
+  if (tagname === "BUTTON"){
+    parentElement = event.target.parentNode.parentNode;
+  }
+  else{
+    parentElement = event.target.parentNode.parentNode.parentNode;
+  }
+
+  let tasktitle = parentElement.childNodes[5].childNodes[1];
+  let taskdescription = parentElement.childNodes[5].childNodes[3];
+  let tasktype = parentElement.childNodes[5].childNodes[5];
+  let submitButton = parentElement.childNodes[7].childNodes[1];
+
+  const updatedData = {
+    tasktitle : tasktitle.innerHTML,
+    tasktype:tasktype.innerHTML,
+    taskdescription:taskdescription.innerHTML,
+  };
+  
+   globalStore = globalStore.map((task)=> {
+     if(task.id === targetID){
+       return{
+         id:task.id,
+         imageUrl:task.imageUrl,
+         tasktitle:updatedData.tasktitle,
+         taskdescription:updatedData.taskdescription,
+         tasktype:updatedData.tasktype,
+       };
+     }
+     return task ;
+   });
+   localStorage.setItem("Tasky" ,JSON.stringify({cards:globalStore}))
+ 
 };
