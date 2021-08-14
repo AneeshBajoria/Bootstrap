@@ -2,14 +2,14 @@ const taskcontainer = document.querySelector(".task__container");
 console.log(taskcontainer);
 
 //Global store
-const globalStore=[];
+let globalStore=[];
 
 
-const newCard = ({id , imageUrl , tasktitle , tasktype ,taskdescription}) => `<div class="col-md-6 col-lg-4 id=${id}">
+const newCard = ({id , imageUrl , tasktitle , tasktype ,taskdescription}) => `<div class="p-2 col-md-6 col-lg-4 id=${id}">
 <div class="card">
-  <div class="card-header d-flex justify-content-end gap-2 ">
+  <div class="card-header d-flex justify-content-end gap-2 " style="background-color: #000000;">
     <button type="button" class="btn btn-outline-success"><i class="fas fa-edit"></i></button>
-    <button type="button" class="btn btn-outline-danger"><i class="fas fa-trash-alt"></i></button>
+    <button type="button" class="btn btn-outline-danger " id=${id} onclick="deleteCard.apply(this,arguments)"><i class="fas fa-trash-alt" id=${id} onclick="deleteCard.apply(this,arguments)"></i></button>
   </div>
   <img src="${imageUrl}" class="card-img-top" alt="cardtop">
   <div class="card-body">
@@ -17,7 +17,7 @@ const newCard = ({id , imageUrl , tasktitle , tasktype ,taskdescription}) => `<d
     <p class="card-text">${taskdescription}</p>
     <span class="badge bg-primary">${tasktype}</span>
   </div>
-  <div class="card-footer text-muted ">
+  <div class="card-footer text-muted " style="background-color: #000000;">
     <button type="button" class="btn btn-outline-primary float-end">Open Task</button>
   </div>
 </div>
@@ -51,3 +51,24 @@ const saveChanges = () => {
      localStorage.setItem("Tasky" , JSON.stringify({cards:globalStore}))
      
 } ;
+
+const deleteCard = (event) => {
+  //id
+  event=window.event;
+  const targetID = event.target.id;
+  const tagname = event.target.tagName;
+  //search
+  const newUpdatedArray = globalStore.filter ((cardObject) => targetID !== cardObject.id); 
+  globalStore= newUpdatedArray ;
+  localStorage.setItem("Tasky" ,JSON.stringify({cards:globalStore}))
+  //Access DOM
+
+  if(tagname === "BUTTON") {
+    //task__container
+    return event.target.parentNode.parentNode.parentNode.parentNode.removeChild(
+      event.target.parentNode.parentNode.parentNode);
+  }
+
+  return event.target.parentNode.parentNode.parentNode.parentNode.parentNode.removeChild(
+    event.target.parentNode.parentNode.parentNode.parentNode);
+}
